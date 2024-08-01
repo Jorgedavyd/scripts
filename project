@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 <PROJECT_NAME> <GIT_URL> <LANGUAGE>"
+    exit 1
+fi
+
+PROJECT_NAME=$1
+GIT_URL=$2
+LANGUAGE=$3
+
+sudo mkdir -p ~/projects/$PROJECT_NAME
+
+sudo cp -r ~/.local/scripts/default_project_$LANGUAGE/* ~/projects/$PROJECT_NAME/
+
+cd ~/projects/$PROJECT_NAME || exit
+
+sudo git init
+sudo git remote add origin $GIT_URL
+
+echo "Project $PROJECT_NAME has been set up and linked to remote repository $GIT_URL."
+
