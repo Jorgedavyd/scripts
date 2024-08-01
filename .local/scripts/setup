@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOTFILES_REPO="https://github.com/yourusername/dotfiles.git"
+DOTFILES_REPO="https://github.com/Jorgedavyd/.dotfiles.git"
 DOTFILES_DIR="$HOME/.dotfiles"
 
 install_stow() {
