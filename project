@@ -9,14 +9,18 @@ PROJECT_NAME=$1
 GIT_URL=$2
 LANGUAGE=$3
 
-sudo mkdir -p ~/projects/$PROJECT_NAME
+mkdir ~/projects/$PROJECT_NAME
 
-sudo cp -r ~/.local/scripts/default_project_$LANGUAGE/* ~/projects/$PROJECT_NAME/
+cp -r ~/.local/scripts/default_project_$LANGUAGE/* ~/projects/$PROJECT_NAME/
 
 cd ~/projects/$PROJECT_NAME || exit
 
-sudo git init
-sudo git remote add origin $GIT_URL
+git init
+git add .
+git commit -m "init autocommit"
+git branch -M main
+git remote add origin $GIT_URL
+git push -u origin main
 
 echo "Project $PROJECT_NAME has been set up and linked to remote repository $GIT_URL."
 
