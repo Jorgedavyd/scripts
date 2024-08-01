@@ -45,8 +45,9 @@ update_submodules() {
 }
 
 set_permission() {
-  chmod +x $$DOTFILES_DIR/scripts/.local/scripts/*
+  chmod +x $DOTFILES_DIR/scripts/.local/scripts/*
 }
+
 stow_dotfiles() {
   echo "Creating symlinks using stow..."
   cd "$DOTFILES_DIR"
