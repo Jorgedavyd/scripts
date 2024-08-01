@@ -44,6 +44,9 @@ update_submodules() {
   git submodule update --init --recursive
 }
 
+set_permission() {
+  chmod +x $$DOTFILES_DIR/scripts/.local/scripts/*
+}
 stow_dotfiles() {
   echo "Creating symlinks using stow..."
   cd "$DOTFILES_DIR"
@@ -60,6 +63,7 @@ main() {
   install_stow
   clone_dotfiles
   update_submodules
+  set_permission
   stow_dotfiles
   display_success_message
 }
