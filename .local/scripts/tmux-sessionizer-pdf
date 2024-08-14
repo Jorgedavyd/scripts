@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 1 ]]; then
+    selected="$1"
+else
+    selected=$(find ~/OneDrive -type f -name "*.pdf" | fzf)
+fi
+
+if [[ -z "$selected" ]]; then
+    exit 0
+fi
+
+tmux_running=$(pgrep tmux)
+parent_dir=$(dirname "$selected")
+selected_name=$(basename "$parent_dir" | sed 's/ /\\ /g' | tr . _)
+filename=$(basename "$selected" | sed 's/ /\\ /g')
+
+if [[ -z "$TMUX" ]] && [[ -z "$tmux_running" ]]; then
+    tmux new-session -s "$selected_name" -c "$parent_dir" -d
+    tmux send-keys -t "$selected_name" "mupdf $filename" C-m
+    tmux attach-session -t "$selected_name"
+    exit 0
+fi
+
+if ! tmux has-session -t="$selected_name" 2> /dev/null; then
+    tmux new-session -s "$selected_name" -c "$parent_dir" -d
+    tmux send-keys -t "$selected_name" "mupdf $filename" C-m
+fi
+
+if [[ -z "$TMUX" ]]; then
+    tmux attach-session -t "$selected_name"
+else
+    tmux switch-client -t "$selected_name"
+fi
+
