@@ -17,7 +17,7 @@ installDependencies() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       if command -v apt-get &> /dev/null; then
         sudo apt-get update
-        sudo apt-get install -y stow ripgrep wget tmux i3 sed
+        sudo apt-get install -y stow ripgrep wget tmux i3 sed nvtop
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
         cargo install alacritty
@@ -26,11 +26,11 @@ installDependencies() {
         sudo apt-get update
         sudo apt-get install neovim
       elif command -v pacman &> /dev/null; then
-        sudo pacman -Syu --noconfirm stow ripgrep fzf tmux i3-wm neovim alacritty xorg sed
+        sudo pacman -Syu --noconfirm stow ripgrep fzf tmux i3-wm neovim alacritty xorg sed nvtop
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
       elif command -v yum &> /dev/null; then
-        sudo yum install -y stow ripgrep tmux i3-wm neovim alacritty xorg fzf sed
+        sudo yum install -y stow ripgrep tmux i3-wm neovim alacritty xorg fzf sed nvtop
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
       fi
@@ -39,7 +39,7 @@ installDependencies() {
         echo "Homebrew not found, installing..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
-      brew install stow ripgrep wget tmux i3 fzf sed
+      brew install stow ripgrep wget tmux i3 fzf sed nvtop
       brew install --cask alacritty
       brew install neovim
     fi
