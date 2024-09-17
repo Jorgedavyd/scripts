@@ -1,12 +1,13 @@
-from lightorch.nn.criterions import LightorchLoss
+from lightorch.nn.criterions import LighTorchLoss
+from torch import Tensor
 
-class criterion(LightorchLoss):
+class criterion(LighTorchLoss):
     def __init__(self, ) -> None:
         super().__init__(
             labels = ,
             factors = ,
         )
-    @torch.jit.script
+
     def forward(self, x: Tensor) -> Tensor:
         return super().forward(x)
 

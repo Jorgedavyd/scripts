@@ -9,8 +9,6 @@ trainer:
 model:
   class_path: model.Model
   dict_kwargs:
-    lr: 1e-2
-    weight_decay: 1e-2
 
 data:
   class_path: data.DataModule
@@ -18,4 +16,3 @@ data:
     batch_size: 32
     num_workers: 8
     pin_memory: true
-    # other parameters

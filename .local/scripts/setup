@@ -14,8 +14,6 @@ xinit() {
 }
 
 installDependencies() {
-  if ! command -v stow &> /dev/null; then
-    echo "stow not found, installing..."
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       if command -v apt-get &> /dev/null; then
         sudo apt-get update
@@ -28,28 +26,25 @@ installDependencies() {
         sudo apt-get update
         sudo apt-get install neovim
       elif command -v pacman &> /dev/null; then
-        sudo pacman -Syu --noconfirm stow ripgrep wget tmux i3-wm neovim
+        sudo pacman -Syu --noconfirm stow ripgrep fzf tmux i3-wm neovim alacritty xorg
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
-        cargo install alacritty
       elif command -v yum &> /dev/null; then
-        sudo yum install -y stow ripgrep wget tmux i3-wm neovim
+        sudo yum install -y stow ripgrep tmux i3-wm neovim alacritty xorg fzf
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
-        cargo install alacritty
       fi
     elif [[ "$OSTYPE" == "darwin"* ]]; then
       if ! command -v brew &> /dev/null; then
         echo "Homebrew not found, installing..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
-      brew install stow ripgrep wget tmux i3
+      brew install stow ripgrep wget tmux i3 fzf
       brew install --cask alacritty
       brew install neovim
     fi
-  else
+    else
     echo "stow is already installed"
-  fi
 }
 
 clone_dotfiles() {
