@@ -17,7 +17,7 @@ installDependencies() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
       if command -v apt-get &> /dev/null; then
         sudo apt-get update
-        sudo apt-get install -y stow ripgrep wget tmux i3
+        sudo apt-get install -y stow ripgrep wget tmux i3 sed
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
         cargo install alacritty
@@ -26,11 +26,11 @@ installDependencies() {
         sudo apt-get update
         sudo apt-get install neovim
       elif command -v pacman &> /dev/null; then
-        sudo pacman -Syu --noconfirm stow ripgrep fzf tmux i3-wm neovim alacritty xorg
+        sudo pacman -Syu --noconfirm stow ripgrep fzf tmux i3-wm neovim alacritty xorg sed
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
       elif command -v yum &> /dev/null; then
-        sudo yum install -y stow ripgrep tmux i3-wm neovim alacritty xorg fzf
+        sudo yum install -y stow ripgrep tmux i3-wm neovim alacritty xorg fzf sed
         wget --proto '=https' --tlsv1.3 -sSf https://sh.rustup.rs | sh
         rustup default stable
       fi
@@ -39,7 +39,7 @@ installDependencies() {
         echo "Homebrew not found, installing..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
-      brew install stow ripgrep wget tmux i3 fzf
+      brew install stow ripgrep wget tmux i3 fzf sed
       brew install --cask alacritty
       brew install neovim
     fi
@@ -72,12 +72,27 @@ stow_dotfiles() {
   echo "Creating symlinks using stow..."
   cd "$DOTFILES_DIR"
   for dir in */; do
-    stow "${dir%/}"
+    stow --adopt "${dir%/}"
   done
 }
 
 display_success_message() {
   echo "Dotfiles have been set up successfully."
+}
+
+activate_service () {
+    service="$1"
+    systemctl enable "$service"
+    systemctl start "$service"
+}
+
+setup_todo_script () {
+    local path="$HOME/.dotfiles/scripts/.local/scripts/todo-script"
+    local target_path="/etc/systemd/system/todo-script.service"
+    mv "$path/services/todo-script.service" "$target_path"
+    sed -i "s/{{USER_PLACEHOLDER}}/$USER/gI" "$target_path"
+    sed -i "s/\/usr\/bin/$HOME\/.local\/scripts/gI" "$target_path"
+    activate_service "todo-script.service"
 }
 
 main() {
@@ -86,6 +101,7 @@ main() {
   update_submodules
   set_permission
   stow_dotfiles
+  setup_todo_script
   display_success_message
   xinit
 }

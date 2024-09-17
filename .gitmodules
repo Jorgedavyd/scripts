@@ -1,0 +1,3 @@
+[submodule ".local/scripts/todo-script"]
+	path = .local/scripts/todo-script
+	url = https://github.com/Jorgedavyd/todo-script.git
