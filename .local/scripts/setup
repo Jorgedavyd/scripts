@@ -65,7 +65,7 @@ update_submodules() {
 }
 
 set_permission() {
-  chmod +x $DOTFILES_DIR/scripts/.local/scripts/*
+  chmod --recursive +x $DOTFILES_DIR/scripts/.local/scripts/*
 }
 
 stow_dotfiles() {

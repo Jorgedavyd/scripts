@@ -1,8 +1,8 @@
 from lightorch.hparams import htuning
+from typing import List, Dict
 from .data import DataModule
 from .loss import criterion
 from .model import Model
-from typing import List
 import optuna
 
 labels : List[str] | str = criterion().labels

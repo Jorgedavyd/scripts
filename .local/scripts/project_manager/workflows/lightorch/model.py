@@ -1,12 +1,13 @@
 from lightorch.training.supervised import Module
 from torch import nn, Tensor
+from .loss import criterion
 
 class model_name(nn.Module):
     def __init__(self, ) -> None:
         super().__init__()
 
     def forward(self, x: Tensor) -> Tensor:
-        return
+        return out
 
 class Model(Module):
     def __init__(self, **hparams) -> None:
