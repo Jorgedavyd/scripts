@@ -10,14 +10,14 @@ PROJECT="$1"
 COMMAND="$2"
 REMOTE_USER="main"
 REMOTE_HOST="192.168.100.100"
-PROJECT_DIR="~/projects/$PROJECT"
+PROJECT_DIR="$HOME/projects/$PROJECT"
+BASE_DIR="$HOME/projects"
 
-rsync -avz --exclude 'env' "$PROJECT_DIR" "$REMOTE_USER@$REMOTE_HOST:$PROJECT_DIR"
+rsync -az --exclude 'env' "$PROJECT_DIR" "$REMOTE_USER@$REMOTE_HOST:$BASE_DIR"
 
 ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
     cd "$PROJECT_DIR"
     $COMMAND
     git restore .
-    git pull
 EOF
 
