@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check if correct number of arguments is provided
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <project> <command>"
     exit 1
