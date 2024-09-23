@@ -4,14 +4,14 @@ project({{NAME_PLACEHOLDER}} LANGUAGES CXX CUDA)
 find_package(Torch REQUIRED)
 find_package(CUDA REQUIRED)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CUDA_STANDARD 14)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library({{NAME_PLACEHOLDER}} SHARED
-    src/cpu/ops_cpu.cpp
-    src/cuda/ops_cuda.cu
+    lib/cpu/sample.cpp
+    lib/cuda/sample.cu
 )
 
 target_link_libraries({{NAME_PLACEHOLDER}} ${TORCH_LIBRARIES})

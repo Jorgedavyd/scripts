@@ -1,4 +1,4 @@
-name: Zig CI
+name: CI
 
 on:
   push:
@@ -19,11 +19,14 @@ jobs:
       - name: Install Zig
         uses: marktiedemann/zig-action@v1
         with:
-          version: 0.11.0 # specify Zig version (change if needed)
+          version: 0.12.0
 
       - name: Build the project
         run: zig build
 
       - name: Run tests
-        run: zig test src/main.zig # modify path to your test file if needed
+        run: zig test src/main.zig
 
+      - uses: nektro/actions-setup-zigmod@v1
+      - run: zigmod aq install 1/nektro/ziglint
+      - run: ~/.zigmod/bin/ziglint
