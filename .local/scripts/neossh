@@ -1,0 +1,71 @@
+#!/bin/bash
+if [[ "$#" -lt 1 || "$#" -gt 3 ]]; then
+    echo "Not valid arguments: use neossh -h"
+    exit 1
+fi
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -n|--host_identifier)
+            HOST="$2"
+            shift 2
+            ;;
+        -c|--command)
+            COMMAND="$2"
+            shift 2
+            ;;
+        -s|--sync)
+            SYNC=true
+            shift 1
+            ;;
+        -h|--help)
+            echo "Usage: neossh [OPTIONS]
+
+neossh (Network Enhanced Operating System Secure Shell) is a utility for remote development and command execution.
+
+Options:
+  -n, --host_identifier <identifier>   Specify the host identifier for SSH connection
+  -c, --command <command>              Run a specific command on the remote host
+  -s, --sync                           Synchronize the current project directory to the remote host
+  -h, --help                           Display this help message
+
+Examples:
+  neossh -n main                       Connect to the 'main' host
+  neossh -n data -c 'ls -la'           Run 'ls -la' command on the 'data' host
+  neossh -n main -s                    Sync project directory to 'main' host and connect
+  neossh -n dev -s -c 'npm install'    Sync project, run 'npm install' on 'dev' host
+
+Notes:
+  - The script uses tmux on the remote host to manage sessions.
+  - If no command is specified, it will attach to the tmux session.
+  - The script performs a git clean and reset on the remote project directory after execution.
+  - The current working directory is assumed to be the project directory.
+
+For more information, please refer to the documentation."
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use 'neossh -h' for help"
+            exit 1
+            ;;
+    esac
+done
+
+PROJECT_DIR="$(pwd)"
+BASE_DIR="$(dirname "$PROJECT_DIR")"
+PROJECT_NAME="$(basename "$PROJECT_DIR")"
+
+ssh "$HOST" -t "tmux has-session -t \"$PROJECT_NAME\" 2>/dev/null || tmux new-session -d -s \"$PROJECT_NAME\" -c \"$PROJECT_DIR\""
+
+if [[ -n "$SYNC" ]]; then
+    rsync -az --exclude "env" "$PROJECT_DIR" "$HOST":"$BASE_DIR"
+fi
+
+if [[ -n "$COMMAND" ]]; then
+    ssh "$HOST" -t "tmux send-keys -t \"$PROJECT_NAME\" \"$COMMAND\" Enter \; detach-client -s \"$PROJECT_NAME\""
+else
+    ssh "$HOST" -t "tmux attach-session -t \"$PROJECT_NAME\""
+fi
+
+ssh "$HOST" -t "cd \"$PROJECT_DIR\" && git clean --force && git reset --hard"
+
