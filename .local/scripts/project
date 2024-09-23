@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_FILE="$HOME/project_config_for_current_path.yaml"
-ALLOWED_WORKFLOWS=("lightorch" "ml-arch" "fusion")
+ALLOWED_WORKFLOWS=("lightorch" "ml-arch" "fusion" "torch-binding" "python-library")
 ALLOWED_GH_ACTIONS=("cpp_ci" "python_ci" "pypi_cd" "rust_ci" "zig_ci")
 
 create_config() {
