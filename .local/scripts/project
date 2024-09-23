@@ -16,15 +16,14 @@ LICENSE:none
 PUBLIC:false
 EOL
     echo "Configuration file created at $CONFIG_FILE"
-    echo "Please edit the file with your desired configuration."
-    echo "Press any key to continue when you're done editing..."
-    read -n 1 -s
+    echo "Opening Neovim..."
+    nvim "$CONFIG_FILE"
 }
 
 parse_config() {
     PROJECT_NAME=$(yq eval '.PROJECT_NAME' "$CONFIG_FILE")
-    WORKFLOWS=$(yq eval '.TYPE' "$CONFIG_FILE")
-    ACTIONS=$(yq eval '.ACTIONS' "$CONFIG_FILE")
+    WORKFLOWS=($(yq eval '.WORKFLOWS[]' "$CONFIG_FILE"))
+    ACTIONS=($(yq eval '.ACTIONS[]' "$CONFIG_FILE"))
     DESCRIPTION=$(yq eval '.DESCRIPTION' "$CONFIG_FILE")
     LICENSE=$(yq eval '.LICENSE' "$CONFIG_FILE")
     PUBLIC=$(yq eval '.PUBLIC' "$CONFIG_FILE")
