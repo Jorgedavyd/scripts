@@ -3,7 +3,7 @@ name: CD
 on:
   push:
     tags:
-      - '*.*.*'  # Trigger on all tag pushes
+      - '*.*.*'
 
 jobs:
   build-and-publish:
@@ -21,8 +21,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          chmod +x ./scripts/cd_requirements.sh
-          sh ./scripts/cd_requirements.sh
+          python3 -m pip install --upgrade pip
+          pip3 install pytest pipreqs pip-tools setuptools wheel
+          pipreqs {{NAME_PLACEHOLDER}} --savepath=./requirements.in
+          sed -i 's/==.*$//' requirements.in
+          sort requirements.in | uniq > requirements_unique.in
+          pip-compile ./requirements_unique.in
+          rm -f *.in
+          pip install -r requirements_unique.txt
+          rm -f requirements_unique.txt
 
       - name: Extract tag name
         id: extract_tag
@@ -30,7 +37,7 @@ jobs:
 
       - name: Update version
         run: |
-          sed -i "s/{{VERSION_PLACEHOLDER}}/${{ env.TAG_NAME }}/g" {{PROJECT_NAME}}/_version.py
+          sed -i "s/{{VERSION_PLACEHOLDER}}/${{ env.TAG_NAME }}/g" {{NAME_PLACEHOLDER}}/__init__.py
 
       - name: Build the package
         run: |
