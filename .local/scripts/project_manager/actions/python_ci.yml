@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
-  pull-request:
-    branches: [main]
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   build:
@@ -14,16 +13,8 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [ '3.9', '3.10', '3.11', '3.12']
-        include:
-          - python-version: '3.9'
-            commit: false
-          - python-version: '3.10'
-            commit: true
-          - python-version: '3.11'
-            commit: false
-          - python-version: '3.12'
-            commit: false
+        python_ver: [ "3.9", "3.10", "3.11", "3.12"]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

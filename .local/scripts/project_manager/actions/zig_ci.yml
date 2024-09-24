@@ -2,11 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
 
 jobs:
   build:
@@ -18,8 +14,6 @@ jobs:
 
       - name: Install Zig
         uses: marktiedemann/zig-action@v1
-        with:
-          version: 0.12.0
 
       - name: Build the project
         run: zig build
